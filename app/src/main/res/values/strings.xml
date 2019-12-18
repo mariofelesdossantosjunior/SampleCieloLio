@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SampleCieloLio</string>
+    <string name="client_id"></string>
+    <string name="acess_token"></string>
+    <string name="new_order">New Order</string>
+    <string name="add_item">Add Item</string>
+    <string name="place_order">Place Order</string>
+    <string name="payment">Payment</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_cart">CartActivity</string>
+    <string name="information">Information</string>
+    <string name="actions_ok">Ok</string>
+    <string name="actions_cancel">Cancel</string>
+    <string name="printer">Printer</string>
+</resources>
