@@ -15,6 +15,7 @@ import cielo.sdk.order.payment.PaymentListener
 import cielo.sdk.printer.PrinterManager
 import com.mario.samplecielo.R
 import com.mario.samplecielo.data.ItemOrder
+import com.mario.samplecielo.util.MyProgressDialog
 import com.mario.samplecielo.util.showCustomDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.random.Random
@@ -150,6 +151,9 @@ class MainActivity : AppCompatActivity() {
      * da LIO
      */
     private fun payment() {
+        val progressDialog = MyProgressDialog(this)
+        progressDialog.execute()
+
         order?.let {
 
             val request = CheckoutRequest.Builder()
@@ -176,6 +180,9 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "Transação: $transacao")
 
                     setOrder(order)
+
+                    //Simula a chamada de fechamento do parceiro
+                    progressDialog.dismiss()
                 }
 
                 override fun onCancel() {
