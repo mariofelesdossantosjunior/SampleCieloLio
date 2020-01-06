@@ -15,6 +15,7 @@ import cielo.sdk.order.payment.PaymentListener
 import cielo.sdk.printer.PrinterManager
 import com.mario.samplecielo.R
 import com.mario.samplecielo.data.ItemOrder
+import com.mario.samplecielo.util.MyProgressDialog
 import com.mario.samplecielo.util.showCustomDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.random.Random
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         button_payment.setOnClickListener {
-            payment()
+            payment(1)
         }
 
         button_printer.setOnClickListener {
@@ -149,12 +150,19 @@ class MainActivity : AppCompatActivity() {
      * Função responsavel por chamar a Intent de Pagamentos
      * da LIO
      */
-    private fun payment() {
+    private fun payment(amount: Long) {
+
+        val progress = MyProgressDialog(this)
+        progress.execute()
+
         order?.let {
+
+            //showInformationPayments(it)
+
 
             val request = CheckoutRequest.Builder()
                 .orderId(it.id)
-                .amount(10)
+                .amount(amount)
                 .build()
 
             orderManager?.checkoutOrder(request, object : PaymentListener {
@@ -168,6 +176,7 @@ class MainActivity : AppCompatActivity() {
                     order.markAsPaid()
                     orderManager?.updateOrder(order)
 
+
                     val payment = order.payments[0]
                     val bandeira = payment.paymentFields["brand"]
                     val transacao = payment.paymentFields["authCode"]
@@ -176,6 +185,10 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "Transação: $transacao")
 
                     setOrder(order)
+
+                    //Replica a chamada do parceiro
+                    progress.dismiss()
+
                 }
 
                 override fun onCancel() {
@@ -189,6 +202,26 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+    }
+
+    private fun showInformationPayments(order: Order) {
+        order.payments.forEach {
+            Log.d(TAG, "Pagamento: ${it.id}")
+            Log.d(TAG, "Pagamento: ${it.externalId}")
+            Log.d(TAG, "Pagamento: ${it.terminal}")
+            Log.d(TAG, "Pagamento: ${it.amount}")
+            Log.d(TAG, "Pagamento: ${it.accessKey}")
+            Log.d(TAG, "Pagamento: ${it.applicationName}")
+            Log.d(TAG, "Pagamento: ${it.authCode}")
+            Log.d(TAG, "Pagamento: ${it.brand}")
+            Log.d(TAG, "Pagamento: ${it.cieloCode}")
+            Log.d(TAG, "Pagamento: ${it.description}")
+            Log.d(TAG, "Pagamento: ${it.discountedAmount}")
+            Log.d(TAG, "Pagamento: ${it.merchantCode}")
+            Log.d(TAG, "Pagamento: ${it.secondaryCode}")
+            Log.d(TAG, "Pagamento: ${it.requestDate}")
+            Log.d(TAG, "======================================================")
+        }
     }
 
     /**
